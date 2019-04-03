@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1va2cc2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.2.4">
+  <bpmn:message id="Message_12ckegv" name="detailsEmpf" />
+  <bpmn:message id="Message_14kqxyi" name="Message_1had7fu" />
+  <bpmn:collaboration id="Collaboration_02cuge4">
+    <bpmn:participant id="Participant_1qywuux" name="PPM" processRef="PPM-Prozess-1" />
+    <bpmn:participant id="Antragsteller" name="Antragsteller" processRef="Antragsteller-Prozess-2" />
+    <bpmn:messageFlow id="MessageFlow_0kklo67" sourceRef="detailsAnf" targetRef="detailTri" />
+    <bpmn:messageFlow id="MessageFlow_1vv3mso" sourceRef="absageSen" targetRef="Antragsteller" />
+    <bpmn:messageFlow id="MessageFlow_12vrhir" sourceRef="themaZus" targetRef="Antragsteller" />
+    <bpmn:messageFlow id="MessageFlow_01hyb6j" sourceRef="Task_1nfwj00" targetRef="Task_0ovyhgg" />
+  </bpmn:collaboration>
+  <bpmn:process id="PPM-Prozess-1" isExecutable="true">
+    <bpmn:endEvent id="EndEvent_1bxpzi9" name="Thema abgesagt">
+      <bpmn:incoming>SequenceFlow_0drvvhy</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_0qsvxfu" name="Thema zugesagt">
+      <bpmn:incoming>SequenceFlow_0xjgx0w</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:inclusiveGateway id="ExclusiveGateway_096gp3b" default="SequenceFlow_097i83r">
+      <bpmn:incoming>SequenceFlow_0zth895</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_097i83r</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0p1isfd</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0v164kx</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:startEvent id="StartEvent_1" name="Anfrage eingegangen">
+      <bpmn:outgoing>SequenceFlow_10oglpe</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sendTask id="detailsAnf" name="Details anfragen">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="subject">Bitte um Details zum Projektantrag '${name}'</camunda:inputParameter>
+            <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
+
+Bitte senden Sie uns zu dem Projektantrag '${name}' weitere Informationen.
+
+Mit freundlichen Grüßen
+
+PPM</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>mail-send</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0v164kx</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1nyvjog</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sendTask id="absageSen" name="Thema absagen">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="subject">Absage Projektantrag '${name}'</camunda:inputParameter>
+            <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
+
+Der Projektantrag '${name}' wird hiermit abgelehnt.
+
+Mit freundlichen Grüßen
+
+PPM</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>mail-send</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_097i83r</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0drvvhy</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sendTask id="themaZus" name="Thema zusagen">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="subject">Zusage Projektantrag '${name}'</camunda:inputParameter>
+            <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
+
+Der Projektantrag '${name}' wird hiermit zugesagt.
+
+Mit freundlichen Grüßen
+
+PPM</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>mail-send</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0p1isfd</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0xjgx0w</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="themenTau" name="Thementauglichkeit prüfen" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="pruef" label="Thema tauglich" type="boolean" />
+          <camunda:formField id="interesst" label="Thema unvollständig" type="boolean" />
+          <camunda:formField id="name" label="Themenbezeichnung" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_10oglpe</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0zth895</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:receiveTask id="Task_0ovyhgg" name="Details empfangen" messageRef="Message_0rknh15">
+      <bpmn:incoming>SequenceFlow_1nyvjog</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1que33d</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:endEvent id="EndEvent_0kamisr" name="Thema vollständig">
+      <bpmn:extensionElements />
+      <bpmn:incoming>SequenceFlow_1que33d</bpmn:incoming>
+      <bpmn:messageEventDefinition messageRef="Message_12ckegv">
+        <bpmn:extensionElements>
+          <camunda:connector>
+            <camunda:inputOutput>
+              <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+              <camunda:inputParameter name="subject">Projektantrag '${name}' ist vollständig</camunda:inputParameter>
+              <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
+
+Der Projektantrag '${name}' ist nun vollständig.
+
+Mit freundlichen Grüßen
+
+PPM</camunda:inputParameter>
+            </camunda:inputOutput>
+            <camunda:connectorId>mail-send</camunda:connectorId>
+          </camunda:connector>
+        </bpmn:extensionElements>
+      </bpmn:messageEventDefinition>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1que33d" sourceRef="Task_0ovyhgg" targetRef="EndEvent_0kamisr" />
+    <bpmn:sequenceFlow id="SequenceFlow_1nyvjog" sourceRef="detailsAnf" targetRef="Task_0ovyhgg" />
+    <bpmn:sequenceFlow id="SequenceFlow_10oglpe" sourceRef="StartEvent_1" targetRef="themenTau" />
+    <bpmn:sequenceFlow id="SequenceFlow_0v164kx" name="Thema unvollständig" sourceRef="ExclusiveGateway_096gp3b" targetRef="detailsAnf">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${interesst == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0p1isfd" name="Thema tauglich" sourceRef="ExclusiveGateway_096gp3b" targetRef="themaZus">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pruef == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_097i83r" name="else" sourceRef="ExclusiveGateway_096gp3b" targetRef="absageSen" />
+    <bpmn:sequenceFlow id="SequenceFlow_0zth895" sourceRef="themenTau" targetRef="ExclusiveGateway_096gp3b" />
+    <bpmn:sequenceFlow id="SequenceFlow_0xjgx0w" sourceRef="themaZus" targetRef="EndEvent_0qsvxfu" />
+    <bpmn:sequenceFlow id="SequenceFlow_0drvvhy" sourceRef="absageSen" targetRef="EndEvent_1bxpzi9" />
+  </bpmn:process>
+  <bpmn:process id="Antragsteller-Prozess-2" isExecutable="true">
+    <bpmn:sequenceFlow id="SequenceFlow_1n65a9c" sourceRef="detailTri" targetRef="Task_0chcsj5" />
+    <bpmn:sequenceFlow id="SequenceFlow_1c3uyea" sourceRef="Task_0chcsj5" targetRef="Task_1nfwj00" />
+    <bpmn:sequenceFlow id="SequenceFlow_1398jpv" sourceRef="Task_1nfwj00" targetRef="EndEvent_07rezgc" />
+    <bpmn:sendTask id="Task_1nfwj00" name="Details senden">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="subject">Details zum Projektantrag</camunda:inputParameter>
+            <camunda:inputParameter name="text">Sehr geehrtes PPM,
+
+Hiermit übersende ich Ihnen die Details zum Projektantrag.
+
+Mit freundlichen Grüßen
+
+Antragsteller</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>mail-send</camunda:connectorId>
+        </camunda:connector>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="Javascript">var service = execution.getProcessEngineServices().getRuntimeService();
+service.createMessageCorrelation("mail");
+var id = service.createExecutionQuery().messageEventSubscriptionName("mail").singleResult();
+service.messageEventReceived("mail", id.getId());</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1c3uyea</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1398jpv</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="EndEvent_07rezgc" name="Details gesendet">
+      <bpmn:incoming>SequenceFlow_1398jpv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Task_0chcsj5" name="Details notieren" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="mehr" label="Details" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1n65a9c</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1c3uyea</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="detailTri" name="Nachricht erhalten" camunda:initiator="Antragsteller">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="read" label="Nachricht gelesen" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1n65a9c</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_0e5zrlh" />
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmn:message id="Message_0e5zrlh" name="Nachricht erhalten" />
+  <bpmn:message id="Message_0ass7dr" name="work" />
+  <bpmn:message id="Message_0rknh15" name="mail" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_02cuge4">
+      <bpmndi:BPMNShape id="Participant_1qywuux_di" bpmnElement="Participant_1qywuux">
+        <dc:Bounds x="68" y="279" width="803" height="298" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1ur3qkt_di" bpmnElement="EndEvent_1bxpzi9">
+        <dc:Bounds x="646" y="410" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="625" y="453" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_04m5rkm_di" bpmnElement="EndEvent_0qsvxfu">
+        <dc:Bounds x="646" y="498" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="623" y="541" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="InclusiveGateway_18126dl_di" bpmnElement="ExclusiveGateway_096gp3b">
+        <dc:Bounds x="354" y="403" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_0xaesar_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="118" y="410" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="104" y="453" width="64" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendTask_0qeyi57_di" bpmnElement="detailsAnf">
+        <dc:Bounds x="473" y="299" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendTask_1ddpyrp_di" bpmnElement="absageSen">
+        <dc:Bounds x="473" y="388" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SendTask_0y7wgoz_di" bpmnElement="themaZus">
+        <dc:Bounds x="473" y="476" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0hr860z_di" bpmnElement="themenTau">
+        <dc:Bounds x="208" y="388" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0drvvhy_di" bpmnElement="SequenceFlow_0drvvhy">
+        <di:waypoint x="573" y="428" />
+        <di:waypoint x="646" y="428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0xjgx0w_di" bpmnElement="SequenceFlow_0xjgx0w">
+        <di:waypoint x="573" y="516" />
+        <di:waypoint x="646" y="516" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0zth895_di" bpmnElement="SequenceFlow_0zth895">
+        <di:waypoint x="308" y="428" />
+        <di:waypoint x="354" y="428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_097i83r_di" bpmnElement="SequenceFlow_097i83r">
+        <di:waypoint x="404" y="428" />
+        <di:waypoint x="473" y="428" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="423" y="421" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0p1isfd_di" bpmnElement="SequenceFlow_0p1isfd">
+        <di:waypoint x="379" y="453" />
+        <di:waypoint x="379" y="516" />
+        <di:waypoint x="473" y="516" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="344" y="483" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0v164kx_di" bpmnElement="SequenceFlow_0v164kx">
+        <di:waypoint x="379" y="403" />
+        <di:waypoint x="379" y="339" />
+        <di:waypoint x="473" y="339" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351" y="366" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_10oglpe_di" bpmnElement="SequenceFlow_10oglpe">
+        <di:waypoint x="154" y="428" />
+        <di:waypoint x="208" y="428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_1envgg7_di" bpmnElement="Antragsteller">
+        <dc:Bounds x="68" y="75" width="802" height="166" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1n65a9c_di" bpmnElement="SequenceFlow_1n65a9c">
+        <di:waypoint x="451" y="155" />
+        <di:waypoint x="506" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_0w407zg_di" bpmnElement="detailTri">
+        <dc:Bounds x="415" y="137" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="389" y="113" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="MessageFlow_0kklo67_di" bpmnElement="MessageFlow_0kklo67">
+        <di:waypoint x="548" y="299" />
+        <di:waypoint x="548" y="223" />
+        <di:waypoint x="433" y="223" />
+        <di:waypoint x="433" y="173" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0tjn4o1_di" bpmnElement="Task_0chcsj5">
+        <dc:Bounds x="506" y="115" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_19kjqr1_di" bpmnElement="EndEvent_0kamisr">
+        <dc:Bounds x="786" y="321" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="761" y="364" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="MessageFlow_1vv3mso_di" bpmnElement="MessageFlow_1vv3mso">
+        <di:waypoint x="473" y="409" />
+        <di:waypoint x="455" y="409" />
+        <di:waypoint x="455" y="241" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_12vrhir_di" bpmnElement="MessageFlow_12vrhir">
+        <di:waypoint x="471" y="487" />
+        <di:waypoint x="441" y="487" />
+        <di:waypoint x="441" y="241" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_07rezgc_di" bpmnElement="EndEvent_07rezgc">
+        <dc:Bounds x="784" y="137" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="761" y="180" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1c3uyea_di" bpmnElement="SequenceFlow_1c3uyea">
+        <di:waypoint x="606" y="155" />
+        <di:waypoint x="639" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1398jpv_di" bpmnElement="SequenceFlow_1398jpv">
+        <di:waypoint x="739" y="155" />
+        <di:waypoint x="784" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="SendTask_04m2een_di" bpmnElement="Task_1nfwj00">
+        <dc:Bounds x="639" y="115" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1nyvjog_di" bpmnElement="SequenceFlow_1nyvjog">
+        <di:waypoint x="573" y="339" />
+        <di:waypoint x="614" y="339" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1que33d_di" bpmnElement="SequenceFlow_1que33d">
+        <di:waypoint x="714" y="339" />
+        <di:waypoint x="786" y="339" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_01hyb6j_di" bpmnElement="MessageFlow_01hyb6j">
+        <di:waypoint x="689" y="195" />
+        <di:waypoint x="689" y="299" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ReceiveTask_1rpvi99_di" bpmnElement="Task_0ovyhgg">
+        <dc:Bounds x="614" y="299" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
