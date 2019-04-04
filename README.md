@@ -76,7 +76,7 @@ Damit ist die Umgebung konfiguriert.
 
 ## Implementierung der Tasks im Camunda Modeler
 
-#### 1. User Task
+### 1. User Task
 
 Erlaubt das direkte Eingeben von Daten durch einen Benutzer auf der Camunda BPM Plattform durch Formulare.
 Im Camunda Modeler wird nachdem die User Task im Prozess eingefügt wurde folgende Einstellung vorgenommen.
@@ -87,10 +87,10 @@ Hier wird der Bearbeiter festgelegt der im System dazu berechtigt ist die Aufgab
 #### 1.2 Forms/Forms Fields 
 Hier können die Input Felder für die Nutzer eingefügt werden. Diese können auch im weiteren Verlauf innerhalb des Prozesses aufgegriffen werden um diese z.B. in Mailseinzubinden oder um Regeln zu definieren. Hier können verschiedene DatenTypen ausgewählt werden. Innerhalb des Prozesses werden vor allem die Datentypen `long` und `boolean` verwendet.
 
-#### 2. Inclusive Gateway
+### 2. Inclusive Gateway
 In diesem Gateway wird keine konkrete Logik konfiguriert. Das Gateway gibt dem Modellierenden lediglich die Regeln vor wie die ein- und ausgehenden Sequenzflüsse zu konfigurieren sind. 
 
-#### 3. Sequence Flow (Default)
+### 3. Sequence Flow (Default)
 Der Sequenzfluss bildet die eigentliche Logik vom Gateway ab.
 
 #### 3.1 General/Details
@@ -99,7 +99,7 @@ Eine sehr elegante und leichte Art Regeln für Sequenzflüsse einzubinden ist im
 #### 3.2 Default Sequence Flow
 Im Rahmen der Implementierung bedarf es neben der grafischen Einbindung in BPMN keine weiteren konfigurationen, da dieser Sequenzfluss immer triggert, wenn sonst keine Expression true ist. 
 
-#### 4. Send Task
+### 4. Send Task
 Erlaubt z.B. des automatisierte Senden von E-Mails auf der Camunda BPM Plattform. Konkret wird dies durch einen Connector implementiert, was keinerlei Programmierkenntnisse benötigt.
 Dokumentation von Camunda: [klick](https://github.com/camunda/camunda-bpm-mail#camunda-bpm-mail)
 
@@ -114,10 +114,10 @@ Im Reiter "Connector" innerhalb "Input Parameters" auf "+" klicken und folgende 
 | subject | Text | Betreff |
 | text    | Text | Inhalt der E-Mail |
         
-#### 5. Receive Task
+### 5. Receive Task
 Hier beginnt der schwierigste Teil der Implementierung. Laut der Dokumentation von Camunda werden für receive Tasks eher Service Tasks verwendet, weil hierbei die technischen Möglichkeiten offener sind und die Connector-ID `mail-poll` gesetzt werden kann.
 
-5.1 Implementierung in der Send Task.
+#### 5.1 Implementierung in der Send Task.
 Die Logik der Receive Task wird im Listener der Send Task abgebildet. Es wird dort die korrelation zur Receive Task aufgebaut die momentan eine "Running Process Instance" offen hat. Der Prozess wartet dort. Message Name in der Receive Task vorher umbenennen auf einen wiederverwendbaren Namen, welcher im nächsten Abschnitt im Script aufgegriffen wird.
 
 
@@ -134,7 +134,7 @@ var id = service.createExecutionQuery().messageEventSubscriptionName("MessageNam
 service.messageEventReceived("MessageName", id.getId());
 ```
 
-#### 6. Message Event
+### 6. Message Event
 Das Message Event wird genauso konfiguriert wie die Send Task aus 4. und weißt keinerlei technische Unterschiede dazu auf. 
 
 Anschließend wird der Prozess hochgeladen und kann ausgeführt werden. 
