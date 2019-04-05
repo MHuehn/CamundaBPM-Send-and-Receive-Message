@@ -30,7 +30,7 @@
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="to">UserSampleMail@gmail.com</camunda:inputParameter>
             <camunda:inputParameter name="subject">Bitte um Details zum Projektantrag '${name}'</camunda:inputParameter>
             <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
 
@@ -50,7 +50,7 @@ PPM</camunda:inputParameter>
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="to">UserSampleMail@gmail.com</camunda:inputParameter>
             <camunda:inputParameter name="subject">Absage Projektantrag '${name}'</camunda:inputParameter>
             <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
 
@@ -70,7 +70,7 @@ PPM</camunda:inputParameter>
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="to">UserSampleMail@gmail.com</camunda:inputParameter>
             <camunda:inputParameter name="subject">Zusage Projektantrag '${name}'</camunda:inputParameter>
             <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
 
@@ -108,7 +108,7 @@ PPM</camunda:inputParameter>
         <bpmn:extensionElements>
           <camunda:connector>
             <camunda:inputOutput>
-              <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+              <camunda:inputParameter name="to">UserSampleMail@gmail.com</camunda:inputParameter>
               <camunda:inputParameter name="subject">Projektantrag '${name}' ist vollständig</camunda:inputParameter>
               <camunda:inputParameter name="text">Sehr geehrte Damen und Herren,
 
@@ -145,7 +145,7 @@ PPM</camunda:inputParameter>
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="to">cikus.marcel@gmail.com</camunda:inputParameter>
+            <camunda:inputParameter name="to">UserSampleMail@gmail.com</camunda:inputParameter>
             <camunda:inputParameter name="subject">Details zum Projektantrag</camunda:inputParameter>
             <camunda:inputParameter name="text">Sehr geehrtes PPM,
 
